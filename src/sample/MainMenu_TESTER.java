@@ -70,7 +70,7 @@ public class MainMenu_TESTER {
                         writeMatches();
                         System.out.println("Thank you for testing the Agency Menu!");
                     }
-                    default -> System.out.println("Enter choices between 1 and 12 only!\n");
+                    default -> System.out.println("Enter choices between 1 and 10 only!\n");
                 }
                 //Catch block that will be executed if the user enters a character instead a number
             } catch (InputMismatchException e) {
@@ -97,7 +97,7 @@ public class MainMenu_TESTER {
             String primarySkill = EasyScannerPlus.nextString();
             System.out.print("Enter Salary £: ");
             double salary = EasyScannerPlus.nextDouble();
-            if (salary < 1) { // If salary smaller than 1 then execute this code
+            if (salary < 0) { // If salary smaller than 1 then execute this code
                 System.out.println("Salary cannot have a negative value!\n");
             } else {
                 System.out.print("Minimum of years of experience: ");
@@ -164,7 +164,7 @@ public class MainMenu_TESTER {
                 }
             }
 
-            /**
+            /*
              * A catch exception thrown by EasyScannerPlus to indicate that the token retrieved does not match the pattern
              * for the expected type, or that the token is out of range for the expected type.
              */
@@ -262,6 +262,7 @@ public class MainMenu_TESTER {
         }
     }
 
+    //Match an applicant with a job
     static void option8() {
 
         System.out.print("Enter your Email: ");
@@ -365,7 +366,7 @@ public class MainMenu_TESTER {
 
         //Usage of the try-with-resources to close the file safely
         try (FileReader jobFile = new FileReader("JobsTester.txt");
-             BufferedReader jobStream = new BufferedReader(jobFile);
+             BufferedReader jobStream = new BufferedReader(jobFile)
         ) {
             ID = jobStream.readLine(); //To read the first line of the file
             while (ID != null) {
@@ -489,7 +490,7 @@ public class MainMenu_TESTER {
         String applicantName, jobName;
 
         try (FileReader matchFile = new FileReader("MatchesTester.Txt");
-            BufferedReader matchStream = new BufferedReader(matchFile);
+            BufferedReader matchStream = new BufferedReader(matchFile)
         ){
             applicantName = matchStream.readLine();
             while (applicantName != null) {
