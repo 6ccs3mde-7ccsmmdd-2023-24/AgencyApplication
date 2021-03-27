@@ -68,14 +68,14 @@ public class Applicant_List {
         }
     }
 
-    /**
-     * A method that will help match applicants and registered jobs
-     * @param jobName The job name
-     */
-    public void matchJob(String jobName) {
-
-        allJobs.getJob(jobName);
-    }
+//    /**
+//     * A method that will help match applicants and registered jobs
+//     * @param jobName The job name
+//     */
+//    public void matchJob(String jobName) {
+//
+//        allJobs.getJob(jobName);
+//    }
 
     /**
      * A Optional method to retrieve an applicant by the parameter emailIn
