@@ -114,6 +114,7 @@ public class Job  implements Checkable {
     @Override
     public String toString() {
 
+        //Format the salary
         DecimalFormat decimalFormat = new DecimalFormat("###,##0");
         return "\n" +
                 "\tJob ID = " + jobId.toUpperCase() + '\n' +
