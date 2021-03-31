@@ -31,7 +31,7 @@ public class Applicant  implements Checkable{
     /**
      * A boolean method that overwrites the check method from Checkable interface.
      * Its aim is to check if the applicant name and the skills does not contain digits
-     * @return Returns false if the name, skill 1 or skill 2 contains digits and true otherwise.
+     * @return Returns false if the name, skill 1 or skill 2 contain digits and true otherwise.
      */
     public boolean check() {
         //For loop to check name

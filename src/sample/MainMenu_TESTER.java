@@ -26,13 +26,13 @@ public class MainMenu_TESTER {
         jobList = new Job_List();
         applicantList = new Applicant_List();
 
+        //Read the Job and Applicant lists
+        readJobList();
+        readApplicantList();
+
         System.out.println("\n************************************");
         System.out.println("   WELCOME TO AGENCY APPLICATION   ");
         System.out.println("************************************\n");
-
-        readJobList();
-        readApplicantList();
-        readMatches();
 
         do {
             //Menu
@@ -67,7 +67,6 @@ public class MainMenu_TESTER {
                     case 10 -> {
                         writeJobList();
                         writeApplicantList();
-                        writeMatches();
                         System.out.println("Thank you for testing the Agency Menu!");
                     }
                     default -> System.out.println("Enter choices between 1 and 10 only!\n");
@@ -389,7 +388,7 @@ public class MainMenu_TESTER {
         }
         //Handle the exception if the file is not found
         catch (FileNotFoundException e) {
-            System.out.println("File not found!");
+            System.out.println("JobsTester.txt not found!");
         } catch (NumberFormatException e) {
             System.out.print("");
         }
@@ -456,57 +455,11 @@ public class MainMenu_TESTER {
 
             //Handle the exception if the file is not found
         } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
+            System.out.println("ApplicantsTester.txt file not found!\n");
         } catch (NumberFormatException e) {
             System.out.print("");
         } catch (IOException e) { //Handle the exception thrown by the FileReader methods
             System.out.println("Problem with the file");
-        }
-    }
-
-    //Method for writing the Matches file
-    static void writeMatches() {
-        try (FileWriter matchFile = new FileWriter("MatchesTester.txt");
-             PrintWriter matchWriter = new PrintWriter(matchFile)) {
-
-            for (String matches : myMatches.keySet()) {
-
-                if (applicantList.getApplicant(matches).isPresent() && jobList.getJob(myMatches.get(matches)).isPresent()) {
-                    matchWriter.print("Applicant Name: ");
-                    matchWriter.println(applicantList.getApplicant(matches).get().getName());
-                    matchWriter.print("Job matched: ");
-                    matchWriter.println(jobList.getJob(myMatches.get(matches)).get().getJobTitle());
-                    matchWriter.println();
-                }
-
-            }
-        } catch (IOException e) {
-            System.out.println("There is a problem with the file!");
-        }
-    }
-
-    //Method fo reading the Matches file
-    static void readMatches() {
-        String applicantName, jobName;
-
-        try (FileReader matchFile = new FileReader("MatchesTester.Txt");
-            BufferedReader matchStream = new BufferedReader(matchFile)
-        ){
-            applicantName = matchStream.readLine();
-            while (applicantName != null) {
-                jobName = matchStream.readLine();
-                myMatches.put(applicantName, jobName);
-                applicantName = matchStream.readLine();
-            }
-        } //Handle the exception if the file is not found
-        catch (FileNotFoundException e) {
-            System.out.println("File not found!");
-        } catch (NumberFormatException e) {
-            System.out.print("");
-        }
-        //Handle the exception thrown by the FileReader methods
-        catch (IOException e) {
-            System.out.println("Problem with the file\n");
         }
     }
 }
