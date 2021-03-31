@@ -1,7 +1,5 @@
 package sample;
 
-import java.io.*;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -27,8 +25,8 @@ public class MainMenu_TESTER {
         applicantList = new Applicant_List();
 
         //Read the Job and Applicant lists
-        readJobList();
-        readApplicantList();
+        JobFileHandler.readJobList(jobList);
+        ApplicantFileHandler.readApplicantList(applicantList);
 
         System.out.println("\n************************************");
         System.out.println("   WELCOME TO AGENCY APPLICATION   ");
@@ -65,8 +63,8 @@ public class MainMenu_TESTER {
                     case 8 -> option8();
                     case 9 -> option9();
                     case 10 -> {
-                        writeJobList();
-                        writeApplicantList();
+                        JobFileHandler.writeJobList(jobList);
+                        ApplicantFileHandler.writeApplicantList(applicantList);
                         System.out.println("Thank you for testing the Agency Menu!");
                     }
                     default -> System.out.println("Enter choices between 1 and 10 only!\n");
@@ -129,10 +127,10 @@ public class MainMenu_TESTER {
     static void option2() {
 
         try {
-            System.out.print("Enter your name:");
-            String appName = EasyScannerPlus.nextString();
             System.out.print("Enter your email: ");
             String email = EasyScannerPlus.nextString();
+            System.out.print("Enter your name:");
+            String appName = EasyScannerPlus.nextString();
             if (applicantList.getApplicant(email).isPresent()) {
                 System.out.println("This email is already registered!");
             } else {
@@ -147,7 +145,7 @@ public class MainMenu_TESTER {
                     System.out.println("\nYour experience cannot be negative!");
                 } else {
                     //Declare objects to test
-                    Applicant applicant = new Applicant(appName, email, skill_1, skill_2, appExperience);
+                    Applicant applicant = new Applicant( email,appName, skill_1, skill_2, appExperience);
                     boolean checkApplicant = applicant.check(); // call the check method from the Applicant class
                     if (checkApplicant) { // This block is executed if the applicant name and skills does not contain digits
                         boolean fine = applicantList.addApplicant(applicant);
@@ -215,7 +213,7 @@ public class MainMenu_TESTER {
             System.out.println("Applicant list is empty\n");
         } else {
             System.out.println("**** Applicant Details ****");
-            System.out.println(applicantList);
+            System.out.println(applicantList.aList);
             System.out.println();
         }
     }
@@ -316,150 +314,8 @@ public class MainMenu_TESTER {
                     }
                 }
             }
-
         } catch (NoSuchElementException e){
         System.out.println(e);
-        }
-    }
-
-
-    //Method for writing the file
-    public static void writeJobList() {
-
-        //Usage of the try-with-resources to close the file safely
-        try (FileWriter jobFile = new FileWriter("JobsTester.txt");
-             PrintWriter jobWriter = new PrintWriter(jobFile)) {
-
-            //To change the salary format
-            DecimalFormat decimalFormat = new DecimalFormat("###,##0.0#");
-
-            //Write each element of the list to the file
-            for (Job item : jobList.jList) {
-                jobWriter.print("ID: ");
-                jobWriter.println(item.getJobId());
-                jobWriter.print("Title: ");
-                jobWriter.println(item.getJobTitle());
-                jobWriter.print("Location: ");
-                jobWriter.println(item.getLocation());
-                jobWriter.print("Job Type: ");
-                jobWriter.println(item.getType());
-                jobWriter.print("Skill: ");
-                jobWriter.println(item.getPrimarySkill());
-                jobWriter.print("Salary: ");
-                jobWriter.println(decimalFormat.format(item.getSalary()));
-                jobWriter.print("Experience: ");
-                jobWriter.println(item.getExperience());
-                jobWriter.println();
-            }
-            //Handle the exception thrown by the FileWriter methods
-        } catch (IOException e) {
-            System.out.println("There is a problem with the file!");
-        }
-    }
-
-    //Method for reading the Job file
-    public static void readJobList() {
-        String ID, jobName, location, description, primarySkill, strSalary, strExperience;
-        int experience;
-        double salary;
-
-        //Usage of the try-with-resources to close the file safely
-        try (FileReader jobFile = new FileReader("JobsTester.txt");
-             BufferedReader jobStream = new BufferedReader(jobFile)
-        ) {
-            ID = jobStream.readLine(); //To read the first line of the file
-            while (ID != null) {
-
-                //Read the remaining of the first record, then all the rest of records until the end of the file
-                jobName = jobStream.readLine();
-                location = jobStream.readLine();
-                description = jobStream.readLine();
-                primarySkill = jobStream.readLine();
-                strSalary = jobStream.readLine();
-
-                //Convert the salary from String to Integer
-                salary = Double.parseDouble(strSalary);
-                strExperience = jobStream.readLine();
-                experience = Integer.parseInt(strExperience);
-                Job myJob = new Job(ID, jobName, location, description, primarySkill, salary, experience);
-                jobList.addJob(myJob);
-                ID = jobStream.readLine();
-            }
-        }
-        //Handle the exception if the file is not found
-        catch (FileNotFoundException e) {
-            System.out.println("JobsTester.txt not found!");
-        } catch (NumberFormatException e) {
-            System.out.print("");
-        }
-        //Handle the exception thrown by the FileReader methods
-        catch (IOException e) {
-            System.out.println("Problem with the file\n");
-        }
-    }
-
-
-    //Method for writing the Applicant file
-    static void writeApplicantList() {
-
-        //Usage of the try-with-resources to close the file safely
-        try (FileWriter applicantFile = new FileWriter("ApplicantsTester.txt");
-             PrintWriter applicantWriter = new PrintWriter(applicantFile)) {
-
-            //Write each element of the list to the file
-            for (Applicant item : applicantList.aList) {
-                applicantWriter.print("Name: ");
-                applicantWriter.println(item.getName());
-                applicantWriter.print("Email: ");
-                applicantWriter.println(item.getEmail());
-                applicantWriter.print("Skill 1: ");
-                applicantWriter.println(item.getSkill_1());
-                applicantWriter.print("Skill 2: ");
-                applicantWriter.println(item.getSkill_2());
-                applicantWriter.print("Experience: ");
-                applicantWriter.println(item.getYourExperience());
-                applicantWriter.println();
-            }
-
-            //Handle the exception thrown by the FileWriter methods
-        } catch (IOException e) {
-            System.out.println("There is a problem with the file!");
-        }
-    }
-
-    //Method for reading the  Applicant file
-    static void readApplicantList() {
-        String name, email, skillOne, skillTwo;
-        String stringExperience;
-        int experience;
-
-        //Usage of the try-with-resources to close the file safely
-        try (FileReader applicantFile = new FileReader("ApplicantsTester.txt");
-             BufferedReader applicantStream = new BufferedReader(applicantFile)) {
-            email = applicantStream.readLine(); //To read the first line of the file
-            while (email != null) {
-
-                //Read the remaining of the first record, then all the rest of records until the end of the file
-                name = applicantStream.readLine();
-                skillOne = applicantStream.readLine();
-                skillTwo = applicantStream.readLine();
-                stringExperience = applicantStream.readLine();
-
-                //Convert the salary from String to Integer
-                experience = Integer.parseInt(stringExperience);
-                Applicant myApplicant = new Applicant(name, email, skillOne, skillTwo, experience);
-                applicantList.addApplicant(myApplicant);
-                email = applicantStream.readLine();
-
-            }
-
-            //Handle the exception if the file is not found
-        } catch (FileNotFoundException e) {
-            System.out.println("ApplicantsTester.txt file not found!\n");
-        } catch (NumberFormatException e) {
-            System.out.print("");
-        } catch (IOException e) { //Handle the exception thrown by the FileReader methods
-            System.out.println("Problem with the file");
         }
     }
 }

@@ -6,8 +6,8 @@ package sample;
  */
 public class Applicant  implements Checkable{
 
-    private String name;
     private String email;
+    private String name;
     private String skill_1;
     private String skill_2;
     private int yourExperience;
@@ -20,9 +20,9 @@ public class Applicant  implements Checkable{
      * @param skill_2 Skill 2 of the applicant
      * @param yourExperience Experience of the applicant
      */
-    public Applicant(String name, String email, String skill_1, String skill_2, int yourExperience) {
-        this.name = name;
+    public Applicant(String email, String name, String skill_1, String skill_2, int yourExperience) {
         this.email = email;
+        this.name = name;
         this.skill_1 = skill_1;
         this.skill_2 = skill_2;
         this.yourExperience = yourExperience;
@@ -58,19 +58,20 @@ public class Applicant  implements Checkable{
     }
 
     /**
-     * Reads the name of the applicant
-     * @return Returns the name of the applicant
-     */
-    public String getName() {
-        return name;
-    }
-    /**
      * Reads the email of the applicant
      * @return Returns the email of the applicant
      */
 
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * Reads the name of the applicant
+     * @return Returns the name of the applicant
+     */
+    public String getName() {
+        return name;
     }
 
     /**

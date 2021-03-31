@@ -1,4 +1,5 @@
 package sample;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
@@ -10,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -29,6 +31,7 @@ public class Main extends Application {
     private static Job_List jobList = new Job_List();
     private static Applicant_List applicantList = new Applicant_List();
     private static Map<String,String> myMatches = new HashMap<>();
+
     // WIDTH and HEIGHT of GUI stored as constants
     private final int WIDTH = 1000;
     private final int HEIGHT = 700;
@@ -136,8 +139,9 @@ public class Main extends Application {
 
         //**** JOB SECTION ****
 
-        AgencyApplicationFileHandler.readJobList(jobList);
-        AgencyApplicationFileHandler.readApplicantList(applicantList);
+        //Read the two files
+        JobFileHandler.readJobList(jobList);
+        ApplicantFileHandler.readApplicantList(applicantList);
 
         // Create HBoxes
         HBox jobDetailsPart1 = new HBox(10);
@@ -220,8 +224,8 @@ public class Main extends Application {
         root.setMinSize(WIDTH,HEIGHT);
         root.setMaxSize(WIDTH,HEIGHT);
 
-        area1.setMaxSize(WIDTH - 300, HEIGHT/5);
-        area2.setMaxSize(WIDTH - 300,HEIGHT/5);
+        area1.setMaxSize(WIDTH - 200, HEIGHT/5);
+        area2.setMaxSize(WIDTH - 200,HEIGHT/5);
 
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
@@ -291,8 +295,6 @@ public class Main extends Application {
 
         //Application Scene
 
-        applicantList = new Applicant_List();
-
         stage.setScene(scene);
         stage.setTitle("Agency Application");
         stage.setResizable(false); //the user cannot resize the application screen
@@ -358,18 +360,16 @@ public class Main extends Application {
 
     //Display all Jobs
     private void displayAllJobsHandler() {
-
-
-        if (jobList == null) {
+        if (jobList.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Job List is empty!");
             alert.showAndWait();
         } else {
             area1.setText("Total of jobs: "+ jobList.totalOfJobs()+"\n\n");
             area1.setText(""+ jobList.jList);
+
         }
     }
-
 
     //Method to display all matches
     private void displayAllMatchesHandler() {
@@ -415,8 +415,8 @@ public class Main extends Application {
     //Add Applicant
     private void addApplicantHandler(){
 
-        String applicantNameEntered = applicantNameField.getText();
         String emailEntered = applicantEmailField.getText();
+        String applicantNameEntered = applicantNameField.getText();
         String skill1Entered = applicantSkill1Field.getText();
         String skill2Entered = applicantSkill2Field.getText();
         String experience = applicantExperienceCombo.getValue();
@@ -428,7 +428,7 @@ public class Main extends Application {
                 alert.setContentText("Do not leave the fields blank!");
                 alert.showAndWait();
             } else {
-                Applicant applicant = new Applicant(applicantNameEntered, emailEntered, skill1Entered, skill2Entered, Integer.parseInt(experience));
+                Applicant applicant = new Applicant( emailEntered,applicantNameEntered, skill1Entered, skill2Entered, Integer.parseInt(experience));
                 boolean checkApplicantDetails = applicant.check();
                 if (checkApplicantDetails) {
                     boolean ok = applicantList.addApplicant(applicant);
@@ -446,8 +446,8 @@ public class Main extends Application {
                     alert.setContentText("Name and Skills must not have digits!");
                     alert.showAndWait();
                 }
-                applicantNameField.setText("");
                 applicantEmailField.setText("");
+                applicantNameField.setText("");
                 applicantSkill1Field.setText("");
                 applicantSkill2Field.setText("");
                 applicantExperienceCombo.setValue("");
@@ -599,15 +599,11 @@ public class Main extends Application {
             area2.setText(""+ e);
         }
     }
-
     //Save and Quit
     private void saveAndQuitHandler() {
-        AgencyApplicationFileHandler.writeJobList(jobList);
-        AgencyApplicationFileHandler.writeApplicantList(applicantList);
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setContentText("Thank you for using the application!");
-//        alert.showAndWait();
-            Platform.exit();
+        JobFileHandler.writeJobList(jobList);
+        ApplicantFileHandler.writeApplicantList(applicantList);
+        Platform.exit();
     }
 
     public static void main(String[] args) {

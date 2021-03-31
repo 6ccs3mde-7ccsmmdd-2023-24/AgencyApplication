@@ -19,17 +19,17 @@ public class Applicant_TESTER {
             // The do while will run multiple times unless the user presses  n
             do {
 
-                System.out.print("Enter your name:");
-                String appName = EasyScannerPlus.nextString();
                 System.out.print("Enter your email: ");
                 String email = EasyScannerPlus.nextString();
+                System.out.print("Enter your name:");
+                String appName = EasyScannerPlus.nextString();
                 System.out.print("Enter skill 1: ");
                 String skill_1 = EasyScannerPlus.nextString();
                 System.out.print("Enter skill_2: ");
                 String skill_2 = EasyScannerPlus.nextString();
                 System.out.print("Years of experience: ");
                 int appExperience = EasyScannerPlus.nextInt();
-                myApplicant = new Applicant(appName, email, skill_1, skill_2, appExperience);
+                myApplicant = new Applicant( email,appName, skill_1, skill_2, appExperience);
 
                 boolean check = myApplicant.check();
                 if (!check) {
