@@ -27,7 +27,7 @@ public class Job_List {
      * @param ID The job ID
      * @return return the job that match with the param, otherwise a dummy value
      */
-    public int search(String ID) {
+    private int search(String ID) {
         for (int i = 0; i <= jList.size() - 1; i++) {
             Job tempJobID =  jList.get(i);
             String tempID = tempJobID.getJobId();
@@ -44,7 +44,7 @@ public class Job_List {
      * @return Returns true if the object was added without problems and false if a problem
      * has occurred
      */
-    public  boolean addJob(Job jobIn) {
+    public boolean addJob(Job jobIn) {
         if (search(jobIn.getJobId()) == -999) {
             jList.add(jobIn);
             return true;
