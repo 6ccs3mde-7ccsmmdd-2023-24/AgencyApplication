@@ -4,7 +4,9 @@ import java.util.*;
 
 /**
  * This is the main tester class that will implement both Job_list and Applicant_List.
- * The Job and applicant instructions will be added on the graphical interface.
+ * The graphical interface developed in part 2 will substitute this class and it will
+ * have user's instructions, to make the application a bit close to those in the real
+ * world.
  * @author Alexandro Cipriano da Silva Filho
  * ID: u1818267
  */
