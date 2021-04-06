@@ -10,24 +10,25 @@ import java.util.Optional;
 
 public class Applicant_List {
 
-    //Declare two lists
+    //Declare a list
     ArrayList<Applicant> aList;
-    Job_List allJobs;
+
 
     /**
      * Constructor to initialize the Applicant List
      */
     public Applicant_List() {
+
+        //Initialize the list
         aList = new ArrayList<>();
-        allJobs = new Job_List();
     }
 
     /**
-     * Method to search an applicant by its email
+     * Method  helper to search an applicant by its email
      * @param email The applicant email
      * @return return the applicant that matches with the param, otherwise a dummy value
      */
-    public int search(String email) {
+    private int search(String email) {
         for (int i = 0; i <= aList.size() - 1; i++) {
             Applicant tempApplicant = aList.get(i);
             String tempNumber = tempApplicant.getEmail();
@@ -68,15 +69,6 @@ public class Applicant_List {
         }
     }
 
-//    /**
-//     * A method that will help match applicants and registered jobs
-//     * @param jobName The job name
-//     */
-//    public void matchJob(String jobName) {
-//
-//        allJobs.getJob(jobName);
-//    }
-
     /**
      * A Optional method to retrieve an applicant by the parameter emailIn
      * @param emailIn The email of the job
@@ -92,10 +84,41 @@ public class Applicant_List {
     }
 
     /**
+     * Method to display 5 records from a position. Instead of showing the whole list,
+     * the user chooses the position he/she wishes to start seeing the records.
+     * @param startPosition
+     */
+    public  void displayApplicantRecords( int  startPosition) throws AgencyException {
+        if (aList.isEmpty()) {  //Check if the list is empty
+            System.out.println("\nList is empty!\n");
+        } else {
+            //Throw AgencyException when the user wants to start seeing applicants from an invalid position
+            if (startPosition < 1 || startPosition > aList.size()) {
+                throw new AgencyException("Error: Nothing to retrieve in this position");
+            } else {
+                System.out.println("\nTotal of Applicants: " + aList.size());
+                System.out.println();
+                for (int count = 0; count < 5; count++) {
+                    int i = count+ startPosition - 1;
+                    if (i >= aList.size()) {
+                        break;
+                    }
+                    System.out.print((count + 1)+ ")");
+
+                    System.out.println(aList.get(i).toString());
+                    System.out.println("\nThis applicant is currently at position "+ i+ " in the list.\n");
+                    System.out.println("------------------------------------------------");
+                }
+            }
+        }
+    }
+
+
+    /**
      * Gets the total of applicants in the list
      * @return Returns the total number of applicants currently in the list
      */
-    public int getTotal() {
+    public int getTotalOfApplicants() {
         return aList.size();
     }
 

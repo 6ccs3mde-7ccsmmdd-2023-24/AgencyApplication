@@ -19,6 +19,7 @@ public class Job_List {
      */
     public Job_List() {
 
+        //Initialize the list
         jList = new ArrayList<>();
     }
 
@@ -53,6 +54,21 @@ public class Job_List {
     }
 
     /**
+     * A boolean method to delete a job from the list
+     * @param ID The job ID
+     * @return Returns true is the the job is found and false otherwise
+     */
+    public boolean removeJob(String ID) {
+        int index = search(ID);
+        if (index != -1) {
+            jList.remove(index);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * A Optional method to retrieve a job by the parameter ID
      * @param ID The ID of the job
      * @return Returns the job or returns empty(null) Optional value
@@ -71,7 +87,7 @@ public class Job_List {
      * Gets the total of jobs in the list
      * @return Returns the total number of jobs currently in the list
      */
-    public int totalOfJobs() {
+    public int getTotalOfJobs() {
 
         return jList.size();
     }
@@ -82,6 +98,36 @@ public class Job_List {
      */
     public boolean isEmpty() {
         return jList.isEmpty();
+    }
+
+    /**
+     * Method to display 5 records from a position. Instead of showing the whole list,
+     * the user chooses the position he/she wishes to start seeing the records.
+     * @param startPosition
+     */
+    public  void displayJobRecords( int  startPosition) throws AgencyException {
+        if (jList.isEmpty()) {  //Check if the list is empty
+            System.out.println("\nList is empty!\n");
+        } else {
+            //Throw AgencyException when the user wants to start seeing jobs from an invalid position
+            if (startPosition < 1 || startPosition > jList.size()) {
+                throw new AgencyException("Error: Nothing to retrieve in this position");
+            } else {
+                System.out.println("\nTotal of jobs: " + jList.size());
+                System.out.println();
+                for (int count = 0; count < 5; count++) {
+                    int i = count+ startPosition - 1;
+                    if (i >= jList.size()) {
+                        break;
+                    }
+                    System.out.print((count + 1)+ ")");
+
+                    System.out.println(jList.get(i).toString());
+                    System.out.println("\nThis job is currently at position "+ i+ " in the list.\n");
+                    System.out.println("----------------------------------------------");
+                }
+            }
+        }
     }
 
     /**

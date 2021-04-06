@@ -3,6 +3,7 @@ package sample;
 /**
  * Class used to record the details of the Applicants
  * @author Alexandro Cipriano da Silva Filho
+ * ID: u1818267
  */
 public class Applicant  implements Checkable{
 
@@ -99,17 +100,58 @@ public class Applicant  implements Checkable{
     }
 
     /**
+     * Sets the applicant Name
+     * @param name The new applicant Name
+     * @return Returns the new applicant Name
+     */
+    public String setName(String name) {
+        this.name = name;
+        return name;
+    }
+
+    /**
+     * Sets the applicant skill 1
+     * @param skill_1 The new applicant skill 1
+     * @return Returns the new applicant skill 1
+     */
+    public String setSkill_1(String skill_1) {
+        this.skill_1 = skill_1;
+        return skill_1;
+    }
+
+    /**
+     * Sets the applicant skill 2
+     * @param skill_2 The new applicant skill 2
+     * @return Returns the new applicant skill 2
+     */
+    public String setSkill_2(String skill_2) {
+        this.skill_2 = skill_2;
+        return skill_2;
+    }
+
+    /**
+     * Sets the applicant experience
+     * @param yourExperience The new applicant experience
+     * @return Returns the new applicant experience
+     */
+    public int setYourExperience(int yourExperience) {
+        this.yourExperience = yourExperience;
+        return yourExperience;
+    }
+
+
+    /**
      * This is an  in-built method that returns the value given to it in string format
      * @return Returns the value given in string format. (The Applicant details)
      */
     @Override
     public String toString() {
         return '\n'+
-                "\tName: "+ name.toUpperCase() + '\n'+
                 "\tEmail: "+ email.toUpperCase()+ '\n'+
+                "\tName: "+ name.toUpperCase() + '\n'+
                 "\tSkill 1: "+ skill_1.toUpperCase() + '\n'+
                 "\tSkill 2: "+ skill_2.toUpperCase()+ '\n'+
-                "\tExperience: "+ yourExperience +" years. "+ '\n';
+                "\tExperience: "+ yourExperience +" years.\n";
 
     }
 }

@@ -12,7 +12,7 @@ public class Applicant_TESTER {
     public static void main(String[] args) {
 
         Applicant myApplicant;
-        char choice = 0;
+        char choice ;
 
         try {
 

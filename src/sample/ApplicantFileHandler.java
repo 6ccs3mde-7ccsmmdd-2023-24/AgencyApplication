@@ -2,6 +2,11 @@ package sample;
 
 import java.io.*;
 
+/**
+ * Class that will write and read objects in the Applicant File
+ * @author Alexandro Cipriano da Silva Filho
+ * ID: u1818267
+ */
 public class ApplicantFileHandler {
     //Method for writing the Applicant file
     static void writeApplicantList(Applicant_List applicantList) {

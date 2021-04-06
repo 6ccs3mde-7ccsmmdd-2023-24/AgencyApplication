@@ -5,14 +5,14 @@ import java.text.DecimalFormat;
 /**
  * This class is used to register details of a job in the Agency
  * @author Alexandro Cipriano da Silva Filho
- *  ID: u1818267
+ * ID: u1818267
  */
 public class Job  implements Checkable {
 
     private String jobId;
     private String jobTitle;
     private String location;
-    private String type;
+    private JobTypeOfContract type;
     private String primarySkill;
     private double salary;
     private int experience;
@@ -29,7 +29,7 @@ public class Job  implements Checkable {
      * @param salary : Job salary
      * @param experience :  of years of experience required
      */
-    public Job(String jobId,String jobTitle, String location, String type,String primarySkill,  double salary, int experience) {
+    public Job(String jobId, String jobTitle, String location, JobTypeOfContract type, String primarySkill, double salary, int experience) {
 
         this.jobId = jobId;
         this.jobTitle = jobTitle;
@@ -79,7 +79,7 @@ public class Job  implements Checkable {
      * Reads the Job Description
      * @return the Job Description
      */
-    public String getType() {
+    public JobTypeOfContract getType() {
         return type;
     }
     /**
@@ -108,6 +108,66 @@ public class Job  implements Checkable {
     }
 
     /**
+     * Sets the job Title
+     * @param jobTitle The new job Title
+     * @return Returns the new job Title
+     */
+    public String setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+        return jobTitle;
+    }
+
+    /**
+     * Sets the job Location
+     * @param location The new job Location
+     * @return Returns the new job Location
+     */
+    public String setLocation(String location) {
+        this.location = location;
+        return location;
+    }
+
+    /**
+     * Sets the job type of contract
+     * @param type The new job type of contract
+     * @return Returns the new job type of contract
+     */
+    public JobTypeOfContract setType(JobTypeOfContract type) {
+        this.type = type;
+        return type;
+    }
+
+    /**
+     * Sets the job main skill required
+     * @param primarySkill The new job main skill required
+     * @return Returns the new job main skill required
+     */
+    public String setPrimarySkill(String primarySkill) {
+        this.primarySkill = primarySkill;
+        return primarySkill;
+    }
+
+    /**
+     * Sets the job salary
+     * @param salary The new job salary
+     * @return Returns the new job salary
+     */
+    public Double setSalary(double salary) {
+        this.salary = salary;
+        return salary;
+    }
+
+    /**
+     * Sets the job experience
+     * @param experience The new job experience
+     * @return Returns the new job experience
+     */
+    public int setExperience(int experience) {
+        this.experience = experience;
+        return experience;
+    }
+
+    /**
      * This is an  in-built method that returns the value given to it in string format
      * @return Returns the value given in string format. (The job details)
      */
@@ -120,9 +180,9 @@ public class Job  implements Checkable {
                 "\tJob ID = " + jobId.toUpperCase() + '\n' +
                 "\tJob Title = " + jobTitle.toUpperCase() + '\n' +
                 "\tLocation = " + location.toUpperCase() + '\n' +
-                "\tType = " + type.toUpperCase() + '\n' +
+                "\tType = " + type + '\n' +
                 "\tPrimary Skill = " + primarySkill.toUpperCase() + '\n' +
-                "\tSalary £ = " + decimalFormat.format(salary) + " a year"+'\n' +
-                "\tExperience = " + experience + " years."+'\n';
+                "\tSalary £ = " + decimalFormat.format(salary) + " a year\n" +
+                "\tExperience = " + experience + " years.\n";
     }
 }

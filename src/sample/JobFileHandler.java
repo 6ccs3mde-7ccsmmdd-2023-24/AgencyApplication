@@ -1,13 +1,13 @@
 package sample;
 
 import java.io.*;
-import java.text.DecimalFormat;
 
 /**
- * Class used to record the details of the  jobs and Applicants
+ * Class that will write and read objects in the Job File
  * @author Alexandro Cipriano da Silva Filho
+ * ID: u1818267
  */
-   public class JobFileHandler {
+   public class JobFileHandler  {
 
         //Method for writing the file
         public static void writeJobList(Job_List jobList) {
@@ -15,9 +15,6 @@ import java.text.DecimalFormat;
                 //Usage of the try-with-resources to close the file safely
                 try (FileWriter jobFile = new FileWriter("Jobs.txt");
                      PrintWriter jobWriter = new PrintWriter(jobFile)) {
-
-                        //To change the salary format
-                        DecimalFormat decimalFormat = new DecimalFormat("###,##0.0#");
 
                         //Write each element of the list to the file
                         for (Job item : jobList.jList) {
@@ -27,7 +24,7 @@ import java.text.DecimalFormat;
                                 jobWriter.println(item.getLocation());
                                 jobWriter.println(item.getType());
                                 jobWriter.println(item.getPrimarySkill());
-                                jobWriter.println(decimalFormat.format(item.getSalary()));
+                                jobWriter.println(item.getSalary());
                                 jobWriter.println(item.getExperience());
 
                         }
@@ -63,7 +60,7 @@ import java.text.DecimalFormat;
 
                                 //Convert Experience from String to Integer
                                 experience = Integer.parseInt(strExperience);
-                                Job myJob = new Job(ID, jobName, location, description, primarySkill, salary, experience);
+                                Job myJob = new Job(ID, jobName, location, JobTypeOfContract.valueOf(description), primarySkill, salary, experience);
                                 jobList.addJob(myJob);
                                 ID = jobStream.readLine();
                         }
@@ -75,8 +72,12 @@ import java.text.DecimalFormat;
                         System.out.print("");
                 }
                 //Handle the exception thrown by the FileReader methods
-                catch (IOException e) {
+                catch (IOException exception) {
                         System.out.println("Problem with the file\n");
+                }
+                //Handle the exception the type of contract of the job. (Contract is of type 'ENUM' )
+                catch (IllegalArgumentException e) {
+                        System.out.println(e);
                 }
         }
 
