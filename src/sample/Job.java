@@ -49,6 +49,7 @@ public class Job  implements Checkable {
 
         //Check if the Job length is equal to 4
         return getJobId().length() == 4;
+
     }
 
     /**

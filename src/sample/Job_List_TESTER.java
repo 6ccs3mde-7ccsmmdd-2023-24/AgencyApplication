@@ -55,79 +55,89 @@ public class Job_List_TESTER {
         try {
 
             String type;
-            System.out.print("Choose a ID for a job of length 4: ");
+            System.out.print("Choose a ID for  the Job of length 4: ");
             String ID = EasyScannerPlus.nextString();
-            System.out.print("Enter job name: ");
+            System.out.print("Job Title: ");
             String jobName = EasyScannerPlus.nextString();
-            System.out.print("Enter job location: ");
+            System.out.print("Location of the Job vacancy: ");
             String location = EasyScannerPlus.nextString();
             System.out.println("Contract Types: ");
             System.out.println("\t1. Full-Time");
             System.out.println("\t2. Part-Time" );
             System.out.println("\t3. Placement");
             System.out.println("\t4. Internship");
-            System.out.print("Enter type of contract: ");
+            System.out.print("Type of contract: ");
             type = EasyScannerPlus.nextString();
+
+            /*
+                 While loop to make sure the method does not terminate when the user enters a value between 1 and 4 and
+                 all previous information already entered must be entered from the beginning.This while may throw an
+                 NumberFormatException if the number is not a digit.At the end of this method there is a catch block
+                 to handle this exception.
+             */
             while (Integer.parseInt(type) < 1 || Integer.parseInt(type) > 4) {
-                System.out.print("\nNo such option!Enter type of contract 1 - 4: ");
+                System.out.println("No such option!Try again:");
                 type = EasyScannerPlus.nextString();
             }
+
             //Switch statement for the type of contract
             switch (type) {
                 case "1" -> {
                     type = String.valueOf(JobTypeOfContract.FULL_TIME);
-                    System.out.println("Contract: " + JobTypeOfContract.FULL_TIME);
+                    System.out.println("\nContract: " + JobTypeOfContract.FULL_TIME+ '\n');
                 }
                 case "2" -> {
                     type = String.valueOf(JobTypeOfContract.PART_TIME);
-                    System.out.println("Contract: " + JobTypeOfContract.PART_TIME +'\n');
+                    System.out.println("\nContract: " + JobTypeOfContract.PART_TIME +'\n');
                 }
                 case "3" -> {
                     type = String.valueOf(JobTypeOfContract.WORK_PLACEMENT);
-                    System.out.println("Contract: " + JobTypeOfContract.WORK_PLACEMENT +'\n');
+                    System.out.println("\nContract: " + JobTypeOfContract.WORK_PLACEMENT +'\n');
                 }
                 case "4" -> {
                     type = String.valueOf(JobTypeOfContract.INTERNSHIP);
-                    System.out.println("Contract: " + JobTypeOfContract.INTERNSHIP +'\n');
+                    System.out.println("\nContract: " + JobTypeOfContract.INTERNSHIP +'\n');
                 }
             }
 
-            System.out.print("Enter primary Skill: ");
+            System.out.print("What is the Main Skill required: ");
             String primarySkill = EasyScannerPlus.nextString();
-            System.out.print("Enter Salary £: ");
+            System.out.print("Job Salary £: ");
             double salary = EasyScannerPlus.nextDouble();
             if (salary < 1) {// If salary smaller than 1 then execute this code
                 System.out.println("\nSalary cannot have a negative value!\n");
             } else {
-                System.out.print("Minimum of years of experience: ");
+                System.out.print("What is the minimum of years of experience for this Job: ");
                 int experience = EasyScannerPlus.nextInt();
                 if (experience < 0) { // If experience smaller than 0 then execute this code
                     System.out.println("\nExperience cannot have a negative value!\n");
                 } else {
-                    Job myJob = new Job(ID, jobName, location, JobTypeOfContract.valueOf(type), primarySkill, salary, experience);
-                    System.out.println();
-                    boolean check = myJob.check();
-                    if (!check) { // This block is executed if the ID length is not equal to 4
-                        System.out.println("Job failed! ID must have 4 and only characters.Try Again!\n");
+                    if (ID.isEmpty() || jobName.isEmpty()|| location.isEmpty()|| type.isEmpty()|| primarySkill.isEmpty()) {
+                        System.out.println("\nError: Make sure all field are entered!\n");
                     } else {
-                        //Attempt to add job to the Job_List
-                        boolean fine = jobList.addJob(myJob);
-                        if (fine) {
-                            System.out.println("Job added");
+                        Job myJob = new Job(ID, jobName, location, JobTypeOfContract.valueOf(type), primarySkill, salary, experience);
+                        System.out.println();
+                        boolean check = myJob.check();
+                        if (!check) { // This block is executed if the ID length is not equal to 4
+                            System.out.println("Job failed! ID must have 4 and only characters.Try Again!\n");
                         } else {
-                            System.out.println("Job already on the system ");
+                            //Attempt to add job to the Job_List
+                            boolean fine = jobList.addJob(myJob);
+                            if (fine) {
+                                System.out.println("Job added");
+                            } else {
+                                System.out.println("Job already on the system ");
+                            }
                         }
                     }
                 }
             }
-
             /*
              * A catch exception thrown by EasyScannerPlus to indicate that the token retrieved does not match the pattern
              * for the expected type, or that the token is out of range for the expected type.
              */
-        } catch (InputMismatchException | NumberFormatException e) {
+        } catch (  NumberFormatException e) {
             System.out.println(e);
-
         }
     }
 
@@ -141,27 +151,27 @@ public class Job_List_TESTER {
         //Retrieve the job using the Optional class
         Optional<Job> job = jobList.getJob(ID);
         System.out.println();
-        if (!job.isPresent()) { //If the job is NOT present in the list execute this block of code
+        if (job.isEmpty()) { //If the job is not found in the list execute this block of code
             System.out.println("This job isn't registered!\n");
         } else {
             char answer;
-            int choice = 0;
+            int choice ;
 
-            //Update Menu.The user chooses what part of the job has to be updated.
-            System.out.print("Would you like to update the job details? (y/n) ");
-            answer = EasyScannerPlus.nextChar();
-            do {
-                if (answer == 'y') {
-                    System.out.println("\n\t\t1. Update Title");
-                    System.out.println("\t\t2. Update Location");
-                    System.out.println("\t\t3. Update Type of Contract");
-                    System.out.println("\t\t4. Update Skill");
-                    System.out.println("\t\t5. Update Salary");
-                    System.out.println("\t\t6. Update Experience");
-                    System.out.println("\t\t7. See Job Details and go back to Applicant Menu\n");
-                    System.out.print("\t\tWhat would you like to update? (1-7) ");
-                    choice = EasyScannerPlus.nextInt();
-                    try {
+            try {
+                //Update Menu.The user chooses what part of the job has to be updated.
+                System.out.print("WARNING: Updating this job may affect the matches for this job.\nProceed? (y/n) ");
+                answer = EasyScannerPlus.nextChar();
+                if (answer == 'y' || answer == 'Y') {
+                    do {
+                        System.out.println("1. Update Title");
+                        System.out.println("2. Update Location");
+                        System.out.println("3. Update Type of Contract");
+                        System.out.println("4. Update Skill");
+                        System.out.println("5. Update Salary");
+                        System.out.println("6. Update Experience");
+                        System.out.println("7. Go back to Job Menu\n");
+                        System.out.print("Enter option: (1-7) ");
+                        choice = EasyScannerPlus.nextInt();
                         //An enhanced switch statement
                         switch (choice) {
                             case 1 -> {
@@ -180,44 +190,45 @@ public class Job_List_TESTER {
                             }
                             case 3 -> {
                                 String type;
-                                System.out.println("\t\tCurrent Type: " + jobList.getJob(ID).get().getType());
-                                System.out.println("\t\tContract Types: ");
+                                System.out.println("Current Contract : " + jobList.getJob(ID).get().getType());
+                                System.out.println("Contract Types: ");
                                 System.out.println("\t\t\t1. Full-Time");
-                                System.out.println("\t\t\t2. Part-Time" );
+                                System.out.println("\t\t\t2. Part-Time");
                                 System.out.println("\t\t\t3. Placement");
                                 System.out.println("\t\t\t4. Internship");
                                 System.out.println("\t\t\t5. Keep Contract");
-                                System.out.print("\t\tEnter  new type of contract: ");
+                                System.out.print("Enter  new type of contract: ");
                                 type = EasyScannerPlus.nextString();
                                 while (Integer.parseInt(type) < 1 || Integer.parseInt(type) > 5) {
-                                    System.out.print("\t\tEnter values 1 to 4 only: ");
+                                    System.out.print("Enter values 1 to 5 only: ");
                                     type = EasyScannerPlus.nextString();
                                 }
+
                                 // An enhanced switch to update the contract of the job
                                 switch (type) {
                                     case "1" -> {
                                         type = String.valueOf(JobTypeOfContract.FULL_TIME);
                                         jobList.getJob(ID).get().setType(JobTypeOfContract.valueOf(type));
-                                        System.out.println("\t\tNew Contract: " + JobTypeOfContract.FULL_TIME);
+                                        System.out.println("New Contract: " + JobTypeOfContract.FULL_TIME);
                                     }
                                     case "2" -> {
                                         type = String.valueOf(JobTypeOfContract.PART_TIME);
                                         jobList.getJob(ID).get().setType(JobTypeOfContract.valueOf(type));
-                                        System.out.println("\t\tNew Contract: " + JobTypeOfContract.PART_TIME +'\n');
+                                        System.out.println("New Contract: " + JobTypeOfContract.PART_TIME + '\n');
                                     }
                                     case "3" -> {
                                         type = String.valueOf(JobTypeOfContract.WORK_PLACEMENT);
                                         jobList.getJob(ID).get().setType(JobTypeOfContract.valueOf(type));
-                                        System.out.println("\t\tNew Contract: " + JobTypeOfContract.WORK_PLACEMENT +'\n');
+                                        System.out.println("New Contract: " + JobTypeOfContract.WORK_PLACEMENT + '\n');
                                     }
                                     case "4" -> {
                                         type = String.valueOf(JobTypeOfContract.INTERNSHIP);
                                         jobList.getJob(ID).get().setType(JobTypeOfContract.valueOf(type));
-                                        System.out.println("\t\tNew Contract: " + JobTypeOfContract.INTERNSHIP +'\n');
+                                        System.out.println("New Contract: " + JobTypeOfContract.INTERNSHIP + '\n');
                                     }
                                     case "5" -> System.out.println("Job contract kept!");
-
                                 }
+
                             }
                             case 4 -> {
                                 System.out.println("Current Skill: " + jobList.getJob(ID).get().getPrimarySkill());
@@ -234,24 +245,33 @@ public class Job_List_TESTER {
                                 System.out.println("New Salary: " + newJobSalary);
                             }
                             case 6 -> {
-                                System.out.println("Current Experience: " + jobList.getJob(ID).get().getType());
+                                System.out.println("Current Experience: " + jobList.getJob(ID).get().getExperience());
                                 System.out.print("Enter new Experience: ");
                                 int newExperience = EasyScannerPlus.nextInt();
                                 int newJobExperience = jobList.getJob(ID).get().setExperience(newExperience);
                                 System.out.println("New Experience: " + newJobExperience);
                             }
-                            case 7 -> System.out.println("------ Job Details ------!\n"+
-                                    jobList.getJob(ID).toString());
-
+                            case 7 -> {
+                                System.out.println("Going to back Job Menu...\n");
+                                Thread.sleep(2000); // Make the application to sleep for 2 seconds
+                            }
                             default -> System.out.println("Choices 1 and 7 only!");
                         }
 
-                        // Catch block to be executed if choice is not a digit
-                    } catch (InputMismatchException e) {
-                        System.out.println(e);
-                    }
+
+                    } while (choice != 7);
+                } else {
+                    System.out.println("Going back to Job Menu...\n");
+                    Thread.sleep(2000); // Make the application to sleep for 2 seconds
                 }
-            } while (choice != 7); //Execute this loop as long as the choice is not equal to 7
+                /*
+                 * Catch block to be executed if choice is not a digit. Also, we catch the InterruptedException
+                 * when a thread waits or sleeps, and other threads are interrupted and cannot proceed further.
+                 * The block also catches the user choice is not a digit.
+                 */
+            } catch (InputMismatchException | NumberFormatException| InterruptedException e) {
+                System.out.println(e);
+            }
         }
     }
 
@@ -262,7 +282,7 @@ public class Job_List_TESTER {
         Optional<Job> job = jobList.getJob(jobID);
         if (job.isPresent()) {
 
-            System.out.print("WARNING: Deleting this job will affect the Applicants that match with this job.\nDelete this job? (y/n) ");
+            System.out.print("WARNING: Deleting this job may affect the matches with this job.\nProceed? (y/n) ");
             char choice = EasyScannerPlus.nextChar();
             //Execute this block of code if the user enters 'y' or 'Y'
             if (choice == 'y'|| choice =='Y') {
@@ -283,29 +303,16 @@ public class Job_List_TESTER {
 
     //Get a job
     static void option4() {
-        try {
-            if (jobList.isEmpty()) {
-                System.out.println("List is empty!\n");
-            } else {
-                System.out.print("Enter job ID: ");
-                String ID = EasyScannerPlus.nextString();
-
-                //Retrieve the job using the Optional class
-                Optional<Job> j = jobList.getJob(ID);
-                System.out.println();
-                if (!jobList.getJob(ID).isPresent()) { //Check if the job is present in the list
-                    System.out.println("This job isn't registered!");
-                } else {
-                    System.out.println(j);
-                }
-                System.out.println();
-            }
-            /**
-             * A catch exception thrown by EasyScannerPlus to indicate that the token retrieved does not match the pattern
-             * for the expected type, or that the token is out of range for the expected type.
-             */
-        }catch(InputMismatchException e){
-                System.out.println(e);
+        System.out.print("Enter job ID: ");
+        String ID = EasyScannerPlus.nextString();
+        //Retrieve the job using the Optional class
+        Optional<Job> job = jobList.getJob(ID);
+        System.out.println();
+        if (job.isPresent()) { //Check if the job is present in the list
+            System.out.println("*** Job Details ***");
+            System.out.println(job.get().toString());
+        } else {
+            System.out.println("Job not found in the List!\n");
         }
     }
 

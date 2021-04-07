@@ -36,7 +36,7 @@ import java.io.*;
 
         //Method for reading the Job file
         public static void readJobList(Job_List jobList) {
-                String ID, jobName, location, description, primarySkill, strSalary, strExperience;
+                String ID, jobName, location, type, primarySkill, strSalary, strExperience;
                 int experience;
                 double salary;
 
@@ -50,7 +50,7 @@ import java.io.*;
                                 //Read the remaining of the first record, then all the rest of records until the end of the file
                                 jobName = jobStream.readLine();
                                 location = jobStream.readLine();
-                                description = jobStream.readLine();
+                                type = jobStream.readLine();
                                 primarySkill = jobStream.readLine();
                                 strSalary = jobStream.readLine();
 
@@ -60,7 +60,7 @@ import java.io.*;
 
                                 //Convert Experience from String to Integer
                                 experience = Integer.parseInt(strExperience);
-                                Job myJob = new Job(ID, jobName, location, JobTypeOfContract.valueOf(description), primarySkill, salary, experience);
+                                Job myJob = new Job(ID, jobName, location, JobTypeOfContract.valueOf(type), primarySkill, salary, experience);
                                 jobList.addJob(myJob);
                                 ID = jobStream.readLine();
                         }

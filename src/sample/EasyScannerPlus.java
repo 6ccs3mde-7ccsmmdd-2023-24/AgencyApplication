@@ -1,3 +1,7 @@
+package sample;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 /**
  * This class has been designed to improve the user's experience by
  * making the keyboard input easier. All methods have been made as
@@ -5,12 +9,7 @@
  * method.
  * @author Alexandro Cipriano da Silva Filho
  * ID: u1818267
- *
  */
-package sample;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 public class EasyScannerPlus  {
 
     //Method to hold integers
@@ -42,11 +41,11 @@ public class EasyScannerPlus  {
     public static String nextString() {
         String s;
         Scanner keyboard = new Scanner(System.in);
-        try {
+
              s = keyboard.nextLine();
-        } catch (NumberFormatException e) {
-            throw  new NumberFormatException("Error: Invalid Entry!");
-        }
+            if (s.isEmpty()) {
+                throw new NumberFormatException("Field must be entered!");
+            }
         return s;
     }
 
