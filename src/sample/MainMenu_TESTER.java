@@ -1,5 +1,6 @@
 package sample;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -26,8 +27,8 @@ public class MainMenu_TESTER {
         applicantList = new Applicant_List();
 
         //Read the Job and Applicant lists. These files can be read in a text editor such as Notepad or an IDE
-        JobFileHandler.readJobList(jobList);
-        ApplicantFileHandler.readApplicantList(applicantList);
+        readJobList(jobList);
+        readApplicantList(applicantList);
 
         System.out.println("Student ID: u1818267");
         System.out.println("\n************************************");
@@ -53,20 +54,22 @@ public class MainMenu_TESTER {
                     case 2 -> option2();
                     case 3 -> option3();
                     case 4 -> {
-                        //The files will be written and saved when the user chooses option 4
-                        JobFileHandler.writeJobList(jobList);
-                        ApplicantFileHandler.writeApplicantList(applicantList);
+                        System.out.println("Exiting the application...");
+                        Thread.sleep(2000); //Sleep the application for 2 seconds
                         System.out.println("Thank you for testing the Agency Menu!");
+                        Thread.sleep(2000); //Sleep the application for 2 seconds
+                        //The files will be written and saved when the user chooses option 4
+                        writeJobList(jobList);
+                        writeApplicantList(applicantList);
                     }
                     // The default will be called if the choice number is not between 1 and 4
                     default -> System.out.println("Enter numbers 1 to 4 only!\n");
                 }
-
                 //Catch block is executed if the user enters a value that is not a digit
-            } catch (InputMismatchException e) {
+                //Also this block executes the AgencyException
+            } catch (InputMismatchException | InterruptedException e) {
                 System.out.println(e);
             }
-
         } while (choice != 4); //Execute this loop as long as the choice is not equal to 4
     }
 
@@ -81,7 +84,6 @@ public class MainMenu_TESTER {
     static void option1() {
 
         int choice = 0; //Initialize the choice
-        jobList = new Job_List();
 
         //Menu
         do {
@@ -107,7 +109,7 @@ public class MainMenu_TESTER {
                     case 4 -> jobOption4();
                     case 5 -> jobOption5();
                     case 6 -> { System.out.println("Going to back Main Menu...\n");
-                    Thread.sleep(2000);
+                    Thread.sleep(2000); //Sleep the application for 2 seconds
                     }
                     default -> System.out.println("Enter options 1 to 6 only!\n");
                 }
@@ -170,10 +172,10 @@ public class MainMenu_TESTER {
             if (myMatches.isEmpty()) {
                 System.out.println("\nThere are no matches recorded!\n");
             } else {
+                System.out.println("---------- Matches ----------\n");
+
                 // For loop that returns a Collection view of the values contained in the map.
                 for (String i : myMatches.keySet()) {
-
-                    System.out.println("---------- Matches ----------\n");
                     //Check if the applicant is present and the job is present
                     //Instead of output the job's ID from the map, this block outputs the job's name.
                     if (applicantList.getApplicant(i).isPresent() && jobList.getJob(myMatches.get(i)).isPresent()) {
@@ -679,36 +681,172 @@ public class MainMenu_TESTER {
             if (findApplicant.isEmpty()) {
                 System.out.println("Applicant not Found!\n");
             } else {
-                //For Loop to show the user the available jobs
-                System.out.println("\t\t\t\t*** Available Jobs ***");
-                for (Job job : jobList.jList) {
-                    System.out.println("Job ID = " + job.getJobId() + "\t\t Job Title = " + job.getJobTitle() + "\t\tLocation = " + job.getLocation() + "\n");
-                }
 
-                //Get the job id from the job list shown above
-                System.out.print("Enter job ID: ");
-                String jobID = EasyScannerPlus.nextString();
-
-                //Check if the user enters a valid job ID from the list above
-                Optional<Job> findJob = jobList.getJob(jobID);
-                if (findJob.isEmpty()) {
-                    System.out.println("Error: Check the List above to see the available jobs.\n");
-                } else {
-                    // Execute this block of code if one of the applicant's skills match with the chosen job
-                    if ((findApplicant.get().getSkill_1().equalsIgnoreCase(findJob.get().getPrimarySkill()) ||
-                            findApplicant.get().getSkill_2().equalsIgnoreCase(findJob.get().getPrimarySkill())) &&
-                            findApplicant.get().getYourExperience() >= findJob.get().getExperience()){
-
-                        myMatches.put(email, jobID);
-                        System.out.println("Congratulations: You have the skills necessary for this job!\n");
-
-                    } else {
-                        System.out.println("\nI m sorry! This job does not match you!");
-                        System.out.println("REASON: You must have the skill required for the job AND the minimum experience required!\n");
+                //Check if the user already has a job match in the Map
+                String checkApplicant = myMatches.get(email);
+                if (checkApplicant == null) {
+                    //For Loop to show the user the available jobs
+                    System.out.println("\t\t\t\t*** Available Jobs ***");
+                    for (Job job : jobList.jList) {
+                        System.out.println("Job ID = " + job.getJobId() + "\t\t Job Title = " + job.getJobTitle() + "\t\tLocation = " + job.getLocation() + "\n");
                     }
+
+                    //Get the job id from the job list shown above
+                    System.out.print("Enter job ID: ");
+                    String jobID = EasyScannerPlus.nextString();
+
+                    //Check if the user enters a valid job ID from the list above
+                    Optional<Job> findJob = jobList.getJob(jobID);
+                    if (findJob.isEmpty()) {
+                        System.out.println("Error: Check the List above to see the available jobs.\n");
+                    } else {
+                        // Execute this block of code if one of the applicant's skills match with the chosen job
+                        if ((findApplicant.get().getSkill_1().equalsIgnoreCase(findJob.get().getPrimarySkill()) ||
+                                findApplicant.get().getSkill_2().equalsIgnoreCase(findJob.get().getPrimarySkill())) &&
+                                findApplicant.get().getYourExperience() >= findJob.get().getExperience()) {
+
+                            myMatches.put(email, jobID);
+                            System.out.println("Congratulations: You have the skills necessary for this job!\n");
+
+                        } else {
+                            System.out.println("\nI m sorry! This job does not match you!");
+                            System.out.println("REASON: You must have the skill required for the job AND the minimum experience required!\n");
+                        }
+                    }
+                } else {
+                    System.out.println("\nERROR: You already have a job match! You can only match one job!\n");
                 }
             }
         }
     }
     //----------------------------------------- END OF METHODS FOR APPLICANTS SECTION ---------------------------------------------------
+
+    // -----------------------------------------METHODS TO WRITE AND READ THE APPLICANTS AND JOBS FILES ----------------------------------------------------
+    //Method for writing the file
+    public static void writeJobList(Job_List jobList) {
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileWriter jobFile = new FileWriter("Jobs.txt");
+             PrintWriter jobWriter = new PrintWriter(jobFile)) {
+
+            //Write each element of the list to the file
+            for (Job item : jobList.jList) {
+
+                jobWriter.println(item.getJobId());
+                jobWriter.println(item.getJobTitle());
+                jobWriter.println(item.getLocation());
+                jobWriter.println(item.getType());
+                jobWriter.println(item.getPrimarySkill());
+                jobWriter.println(item.getSalary());
+                jobWriter.println(item.getExperience());
+
+            }
+            //Handle the exception thrown by the FileWriter methods
+        } catch (IOException e) {
+            System.out.println("There is a problem with the file!");
+        }
+    }
+
+    //Method for reading the Job file
+    public static void readJobList(Job_List jobList) {
+        String ID, jobName, location, type, primarySkill, strSalary, strExperience;
+        int experience;
+        double salary;
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileReader jobFile = new FileReader("Jobs.txt");
+             BufferedReader jobStream = new BufferedReader(jobFile)
+        ) {
+            ID = jobStream.readLine(); //To read the first line of the file
+            while (ID != null) {
+
+                //Read the remaining of the first record, then all the rest of records until the end of the file
+                jobName = jobStream.readLine();
+                location = jobStream.readLine();
+                type = jobStream.readLine();
+                primarySkill = jobStream.readLine();
+                strSalary = jobStream.readLine();
+
+                //Convert the salary from String to Double
+                salary = Double.parseDouble(strSalary);
+                strExperience = jobStream.readLine();
+
+                //Convert Experience from String to Integer
+                experience = Integer.parseInt(strExperience);
+                Job myJob = new Job(ID, jobName, location, JobTypeOfContract.valueOf(type), primarySkill, salary, experience);
+                jobList.addJob(myJob);
+                ID = jobStream.readLine();
+            }
+        }
+        //Handle the exception if the file is not found
+        catch (FileNotFoundException e) {
+            System.out.println("Jobs.txt not found!");
+        } catch (NumberFormatException e) {
+            System.out.print("");
+        }
+        //Handle the exception thrown by the FileReader methods
+        catch (IOException exception) {
+            System.out.println("Problem with the file\n");
+        }
+        //Handle the exception the type of contract of the job. (Contract is of type 'ENUM' )
+        catch (IllegalArgumentException e) {
+            System.out.println(e);
+        }
+    }
+    //Method for writing the Applicant file
+    static void writeApplicantList(Applicant_List applicantList) {
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileWriter applicantFile = new FileWriter("Applicants.txt");
+             PrintWriter applicantWriter = new PrintWriter(applicantFile)) {
+
+            //Write each element of the list to the file
+            for (Applicant item : applicantList.aList) {
+
+                applicantWriter.println(item.getEmail());
+                applicantWriter.println(item.getName());
+                applicantWriter.println(item.getSkill_1());
+                applicantWriter.println(item.getSkill_2());
+                applicantWriter.println(item.getYourExperience());
+            }
+
+            //Handle the exception thrown by the FileWriter methods
+        } catch (IOException e) {
+            System.out.println("There is a problem with the file!");
+        }
+    }
+
+    //Method for reading the  Applicant file
+    static void readApplicantList(Applicant_List applicantList) {
+        String email,name, skillOne, skillTwo;
+        String stringExperience;
+        int experience;
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileReader applicantFile = new FileReader("Applicants.txt");
+             BufferedReader applicantStream = new BufferedReader(applicantFile)) {
+            email = applicantStream.readLine(); //To read the first line of the file
+            while (email != null) {
+
+                //Read the remaining of the first record, then all the rest of records until the end of the file
+                name = applicantStream.readLine();
+                skillOne = applicantStream.readLine();
+                skillTwo = applicantStream.readLine();
+                stringExperience = applicantStream.readLine();
+
+                //Convert the salary from String to Integer
+                experience = Integer.parseInt(stringExperience);
+                Applicant myApplicant = new Applicant( email,name, skillOne, skillTwo, experience);
+                applicantList.addApplicant(myApplicant);
+                email = applicantStream.readLine();
+            }
+            //Handle the exception if the file is not found
+        } catch (FileNotFoundException e) {
+            System.out.println("Applicants.txt  not found!\n");
+        } catch (NumberFormatException e) {
+            System.out.print("");
+        } catch (IOException e) { //Handle the exception thrown by the FileReader methods
+            System.out.println("Problem with the file");
+        }
+    }
 }

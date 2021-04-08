@@ -12,7 +12,7 @@ import java.util.Optional;
 public class Job_List {
 
     //Declare a list
-    List<Job> jList ;
+    ArrayList<Job> jList ;
 
     /**
      * Constructor to initialize the the Job List

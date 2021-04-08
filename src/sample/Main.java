@@ -5,6 +5,7 @@
  * ID: u1818267
  */
 package sample;
+import java.io.*;
 import java.util.*;
 
 import javafx.application.Application;
@@ -137,8 +138,8 @@ public class Main extends Application {
         //**** JOB SECTION ****
 
         //Read the two files
-        JobFileHandler.readJobList(jobList);
-        ApplicantFileHandler.readApplicantList(applicantList);
+        readJobList(jobList);
+        readApplicantList(applicantList);
 
         // Create HBoxes
         HBox jobDetailsPart1 = new HBox(10);
@@ -1055,11 +1056,140 @@ public class Main extends Application {
     //Save and Quit
     private void saveAndQuitHandler() {
 
-        JobFileHandler.writeJobList(jobList);
-        ApplicantFileHandler.writeApplicantList(applicantList);
+        writeJobList(jobList);
+        writeApplicantList(applicantList);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Saving all Data...\nThank you for using the App!", new ButtonType("Leave"));
         alert.showAndWait();
         Platform.exit();
+    }
+
+    // -----------------------------------------METHODS TO WRITE AND READ THE APPLICANTS AND JOBS FILES ----------------------------------------------------
+    //Method for writing the file
+    public static void writeJobList(Job_List jobList) {
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileWriter jobFile = new FileWriter("Jobs.txt");
+             PrintWriter jobWriter = new PrintWriter(jobFile)) {
+
+            //Write each element of the list to the file
+            for (Job item : jobList.jList) {
+
+                jobWriter.println(item.getJobId());
+                jobWriter.println(item.getJobTitle());
+                jobWriter.println(item.getLocation());
+                jobWriter.println(item.getType());
+                jobWriter.println(item.getPrimarySkill());
+                jobWriter.println(item.getSalary());
+                jobWriter.println(item.getExperience());
+
+            }
+            //Handle the exception thrown by the FileWriter methods
+        } catch (IOException e) {
+            System.out.println("There is a problem with the file!");
+        }
+    }
+
+    //Method for reading the Job file
+    public static void readJobList(Job_List jobList) {
+        String ID, jobName, location, type, primarySkill, strSalary, strExperience;
+        int experience;
+        double salary;
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileReader jobFile = new FileReader("Jobs.txt");
+             BufferedReader jobStream = new BufferedReader(jobFile)
+        ) {
+            ID = jobStream.readLine(); //To read the first line of the file
+            while (ID != null) {
+
+                //Read the remaining of the first record, then all the rest of records until the end of the file
+                jobName = jobStream.readLine();
+                location = jobStream.readLine();
+                type = jobStream.readLine();
+                primarySkill = jobStream.readLine();
+                strSalary = jobStream.readLine();
+
+                //Convert the salary from String to Double
+                salary = Double.parseDouble(strSalary);
+                strExperience = jobStream.readLine();
+
+                //Convert Experience from String to Integer
+                experience = Integer.parseInt(strExperience);
+                Job myJob = new Job(ID, jobName, location, JobTypeOfContract.valueOf(type), primarySkill, salary, experience);
+                jobList.addJob(myJob);
+                ID = jobStream.readLine();
+            }
+        }
+        //Handle the exception if the file is not found
+        catch (FileNotFoundException e) {
+            System.out.println("Jobs.txt not found!");
+        } catch (NumberFormatException e) {
+            System.out.print("");
+        }
+        //Handle the exception thrown by the FileReader methods
+        catch (IOException exception) {
+            System.out.println("Problem with the file\n");
+        }
+        //Handle the exception the type of contract of the job. (Contract is of type 'ENUM' )
+        catch (IllegalArgumentException e) {
+            System.out.println(e);
+        }
+    }
+    //Method for writing the Applicant file
+    static void writeApplicantList(Applicant_List applicantList) {
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileWriter applicantFile = new FileWriter("Applicants.txt");
+             PrintWriter applicantWriter = new PrintWriter(applicantFile)) {
+
+            //Write each element of the list to the file
+            for (Applicant item : applicantList.aList) {
+
+                applicantWriter.println(item.getEmail());
+                applicantWriter.println(item.getName());
+                applicantWriter.println(item.getSkill_1());
+                applicantWriter.println(item.getSkill_2());
+                applicantWriter.println(item.getYourExperience());
+            }
+
+            //Handle the exception thrown by the FileWriter methods
+        } catch (IOException e) {
+            System.out.println("There is a problem with the file!");
+        }
+    }
+
+    //Method for reading the  Applicant file
+    static void readApplicantList(Applicant_List applicantList) {
+        String email,name, skillOne, skillTwo;
+        String stringExperience;
+        int experience;
+
+        //Usage of the try-with-resources to close the file safely
+        try (FileReader applicantFile = new FileReader("Applicants.txt");
+             BufferedReader applicantStream = new BufferedReader(applicantFile)) {
+            email = applicantStream.readLine(); //To read the first line of the file
+            while (email != null) {
+
+                //Read the remaining of the first record, then all the rest of records until the end of the file
+                name = applicantStream.readLine();
+                skillOne = applicantStream.readLine();
+                skillTwo = applicantStream.readLine();
+                stringExperience = applicantStream.readLine();
+
+                //Convert the salary from String to Integer
+                experience = Integer.parseInt(stringExperience);
+                Applicant myApplicant = new Applicant( email,name, skillOne, skillTwo, experience);
+                applicantList.addApplicant(myApplicant);
+                email = applicantStream.readLine();
+            }
+            //Handle the exception if the file is not found
+        } catch (FileNotFoundException e) {
+            System.out.println("Applicants.txt  not found!\n");
+        } catch (NumberFormatException e) {
+            System.out.print("");
+        } catch (IOException e) { //Handle the exception thrown by the FileReader methods
+            System.out.println("Problem with the file");
+        }
     }
 
     public static void main(String[] args) {
